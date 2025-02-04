@@ -93,10 +93,9 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
-    """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
+    "Search the shallowest nodes in the search tree first."
     node = problem.getStartState
-    if problem.isGoalState(problem.getStartState): return [node]
+    if problem.isGoalState(problem.getStartState): return ['stop']
     frontier = util.Queue()
     frontier.push(node)
     reached = [problem.getStartState]
@@ -104,7 +103,12 @@ def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
         node = frontier.pop
         for child in problem.getSuccessors(node):
             s = child
-        if problem.isGoalState(s): return reached
+        if problem.isGoalState(s): 
+            dics = []
+            for state in reached:
+                dics.append('left')#help
+            dics.append('stop')
+            return dics
         if s not in reached:
             reached.append(s)
             frontier.push(s)
