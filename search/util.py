@@ -149,23 +149,34 @@ class Stack:
 
 class Queue:
     "A container with a first-in-first-out (FIFO) queuing policy."
-    def __init__(self):
-        self.list = []
 
-    def push(self,item):
+    def __init__(self,item):
+        if item == None: self.list = []
+        else: self.list = [item]
+
+    def enqueue(self,item):
         "Enqueue the 'item' into the queue"
         self.list.insert(0,item)
 
-    def pop(self):
+    def dequeue(self):
         """
           Dequeue the earliest enqueued item still in the queue. This
           operation removes the item from the queue.
         """
         return self.list.pop()
+    
+    def peek(self):
+        """
+        Return the earliest enqueued item still in the queue.
+        """
+        return self.list[0]
 
     def isEmpty(self):
         "Returns true if the queue is empty"
         return len(self.list) == 0
+    
+    def size(self):
+        return len(self.list)
 
 class PriorityQueue:
     """
