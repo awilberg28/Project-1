@@ -103,13 +103,10 @@ def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     while not frontier.isEmpty():
         node = frontier.dequeue()
         succ = problem.getSuccessors(node)
-        for (child,_,_) in succ:
+        for (child,action,_) in succ:
             s = child
-            if problem.isGoalState(s):
-                for state in reached:
-                    dics.append('left')#help
-                dics.append('stop')
-                return dics
+            dics.append(action)
+            if problem.isGoalState(s): return dics
             if s not in reached:
                 reached.append(s)
                 frontier.enqueue(s)

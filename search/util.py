@@ -132,8 +132,9 @@ class FixedRandom:
 
 class Stack:
     "A container with a last-in-first-out (LIFO) queuing policy."
-    def __init__(self):
-        self.list = []
+    def __init__(self,item):
+        if item == None: self.list = [item]
+        else: self.list = []
 
     def push(self,item):
         "Push 'item' onto the stack"
@@ -142,10 +143,15 @@ class Stack:
     def pop(self):
         "Pop the most recently pushed item from the stack"
         return self.list.pop()
+    
+    def peek(self): return self.list[len(self.list-1)]
 
     def isEmpty(self):
         "Returns true if the stack is empty"
         return len(self.list) == 0
+    
+    def size(self):
+        return len(self.list)
 
 class Queue:
     "A container with a first-in-first-out (FIFO) queuing policy."
