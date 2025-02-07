@@ -87,20 +87,32 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
         if problem.isGoalState(State):
             return DirList
         
-        for successors, cost, directions in  problem.getSuccessors(State)
-        
-        while not ToVisit.isEmpty:
-            
+        if State not in Visited:
+            Visited.add(State)
 
+        for succesor, dir, cost in problem.getSuccessors(State):
+            if succesor not in Visited:
+                ToVisit.push((succesor, DirList + [dir]))
 
-
-
-
-    
-    return 
+    return []
 
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
+    ToVisit = util.Queue()
+    Visited = set(problem.getStartState())
+    ToVisit.push((problem.getStartState() , []))
+    
 
+    while not ToVisit.isEmpty():
+        State , DirList = ToVisit.pop()
+        if problem.isGoalState(State):
+            return DirList
+
+        for succesor, dir, cost in problem.getSuccessors(State):
+            if succesor not in Visited:
+                ToVisit.push((succesor, DirList + [dir]))
+                Visited.add(succesor)
+                
+    return []
 
 
 
@@ -108,9 +120,27 @@ def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     util.raiseNotDefined()
 
 def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
-    """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    ToVisit = util.PriorityQueue()
+    TotalCost = {}
+    ToVisit.push((problem.getStartState() , []), 0)
+    TotalCost[problem.getStartState()] = 0
+
+    while not ToVisit.isEmpty():
+        State , DirList = ToVisit.pop()
+        
+        if problem.isGoalState(State):
+            return DirList
+
+        if State not in TotalCost:
+            TotalCost.add(State)
+
+        for succesor, dir, cost in problem.getSuccessors(State):
+            newCost = TotalCost[State] + cost
+            if succesor not in TotalCost or newCost < TotalCost[succesor]:
+                TotalCost[succesor] = newCost
+                ToVisit.push((succesor, DirList + [dir]), newCost)
+                
+    return []
 
 def nullHeuristic(state, problem=None) -> float:
     """
