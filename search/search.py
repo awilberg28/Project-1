@@ -95,15 +95,14 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     "Search the shallowest nodes in the search tree first."
     node = problem.getStartState()
-    if problem.isGoalState(problem.getStartState()): return ['']
+    if problem.isGoalState(node): return [node]
     frontier = util.Queue(node)
-    reached = [problem.getStartState()]
+    reached = [node]
     dics = []
-    print(frontier.peek())
     while not frontier.isEmpty():
         node = frontier.dequeue()
         succ = problem.getSuccessors(node)
-        for (child,action,_) in succ:
+        for (child,action,cost) in succ:
             s = child
             dics.append(action)
             if problem.isGoalState(s): return dics

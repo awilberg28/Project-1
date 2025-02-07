@@ -195,17 +195,20 @@ class PriorityQueue:
         self.heap = []
         self.count = 0
 
-    def push(self, item, priority):
+    def enqueue(self, item, priority):
         entry = (priority, self.count, item)
         heapq.heappush(self.heap, entry)
         self.count += 1
 
-    def pop(self):
+    def dequeue(self):
         (_, _, item) = heapq.heappop(self.heap)
         return item
 
     def isEmpty(self):
         return len(self.heap) == 0
+    
+    def size(self):
+        return len(self.heap)
 
     def update(self, item, priority):
         # If item already in priority queue with higher priority, update its priority and rebuild the heap.
