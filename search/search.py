@@ -101,38 +101,17 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
     #while the stack is not empty
     while not currentStack.isEmpty():
         state, path = currentStack.pop()
-        print("Current stack:", currentStack.getElements())
+        # print("Current stack:", currentStack.getElements())
         if problem.isGoalState(state):
-            print("Current stack: \n", currentStack.getElements())
+            # print("Current stack: \n", currentStack.getElements())
             return path
         if state not in visitedNodes:
             visitedNodes.add(state)
         for successor, action, stepCost in problem.getSuccessors(state):
             if successor not in visitedNodes:
                 currentStack.push((successor, path + [action]))
-                print("Current stack: \n", currentStack.getElements())
+                # print("Current stack: \n", currentStack.getElements())
     return []
-    # # push start state and empty path
-    # currentStack.push(problem.getStartState(), [])
-    # visited = set()
-    # while (not currentStack.isEmpty()):
-    #     topState, path = currentStack.pop()
-    #     if topState.isGoalState(topState):
-    #         return path
-    #     if topState not in visited:
-    #         visited.add(topState)
-    #         for successor, action, stepCost in problem.getSucessors(topState):
-    #             if successor not in visited:
-    #                 currentStack.push((successor,path+[action]))
-    # return []
-    # while current.getSuccessors(current.getStartState()).count > 0:
-    #     print(current.getSuccessors(current.getStartState()))
-    #     return []
-    
-    # print("Start:", problem.getStartState())
-    # print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    # print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    # util.raiseNotDefined()
 
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     """Search the shallowest nodes in the search tree first."""
