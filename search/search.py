@@ -76,22 +76,6 @@ def tinyMazeSearch(problem: SearchProblem) -> List[Directions]:
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
-    """
-    Search the deepest nodes in the search tree first.
-
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
-
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
-
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    """
-
-    "*** YOUR CODE HERE ***"
-
     currentStack = util.Stack()
     # current = problem
     start_state = problem.getStartState()
@@ -112,7 +96,7 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
                 currentStack.push((successor, path + [action]))
                 # print("Current stack: \n", currentStack.getElements())
     return []
-
+  
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
@@ -133,11 +117,28 @@ def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     return []
 
 def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
-    """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
+    toVisit = util.PriorityQueue()
+    totalCost = {}
+    toVisit.push((problem.getStartState() , []), 0)
+    totalCost[problem.getStartState()] = 0
 
-                                  
-    util.raiseNotDefined()
+    while not toVisit.isEmpty():
+        state , dirList = toVisit.pop()
+        
+        if problem.isGoalState(state):
+            return dirList
+
+        if state not in totalCost:
+            totalCost.add(state)
+
+        for successor, dir, cost in problem.getSuccessors(state):
+            newCost = totalCost[state] + cost
+            if (successor not in totalCost) or (newCost < totalCost[successor]):
+                totalCost[successor] = newCost
+                toVisit.push((successor, dirList + [dir]), newCost)
+                
+    return []
+
 
 def nullHeuristic(state, problem=None) -> float:
     """
