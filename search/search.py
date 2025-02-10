@@ -76,31 +76,67 @@ def tinyMazeSearch(problem: SearchProblem) -> List[Directions]:
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
-    """
-    Search the deepest nodes in the search tree first.
+    toVisit = util.Stack()
+    visited = set()
+    toVisit.push((problem.getStartState() , []))
+    print("stack items", toVisit.getElements())
 
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
 
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
+    while not toVisit.isEmpty():
+        state , dirList = toVisit.pop()
+        if problem.isGoalState(state):
+            return dirList
+        
+        if state not in visited:
+            visited.add(state)
 
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+        for successor, dir, cost in problem.getSuccessors(state):
+            if successor not in visited:
+                toVisit.push((successor, dirList + [dir]))
+
+    return []
 
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
-    """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    toVisit = util.Queue()
+    visited = set(problem.getStartState())
+    toVisit.push((problem.getStartState() , []))
+    
+
+    while not toVisit.isEmpty():
+        state , dirList = toVisit.pop()
+        if problem.isGoalState(state):
+            return dirList
+
+        for successor, dir, cost in problem.getSuccessors(state):
+            if successor not in visited:
+                toVisit.push((successor, dirList + [dir]))
+                visited.add(successor)
+                
+    return []
+
 
 def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
-    """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    toVisit = util.PriorityQueue()
+    totalCost = {}
+    toVisit.push((problem.getStartState() , []), 0)
+    totalCost[problem.getStartState()] = 0
+
+    while not toVisit.isEmpty():
+        state , dirList = toVisit.pop()
+        
+        if problem.isGoalState(state):
+            return dirList
+
+        if state not in totalCost:
+            totalCost.add(state)
+
+        for successor, dir, cost in problem.getSuccessors(state):
+            newCost = totalCost[state] + cost
+            if (successor not in totalCost) or (newCost < totalCost[successor]):
+                totalCost[successor] = newCost
+                toVisit.push((successor, dirList + [dir]), newCost)
+                
+    return []
 
 def nullHeuristic(state, problem=None) -> float:
     """
