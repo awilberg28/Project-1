@@ -76,69 +76,65 @@ def tinyMazeSearch(problem: SearchProblem) -> List[Directions]:
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
-    ToVisit = util.Stack()
-    Visited = set()
-    ToVisit.push((problem.getStartState() , []))
-    print("stack items", ToVisit.getElements())
+    toVisit = util.Stack()
+    visited = set()
+    toVisit.push((problem.getStartState() , []))
+    print("stack items", toVisit.getElements())
 
 
-    while not ToVisit.isEmpty():
-        State , DirList = ToVisit.pop()
+    while not toVisit.isEmpty():
+        state , dirList = toVisit.pop()
         if problem.isGoalState(State):
-            return DirList
+            return dirList
         
-        if State not in Visited:
-            Visited.add(State)
+        if state not in visited:
+            visited.add(state)
 
-        for succesor, dir, cost in problem.getSuccessors(State):
-            if succesor not in Visited:
-                ToVisit.push((succesor, DirList + [dir]))
+        for successor, dir, cost in problem.getSuccessors(state):
+            if successor not in visited:
+                toVisit.push((successor, dirList + [dir]))
 
     return []
 
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
-    ToVisit = util.Queue()
-    Visited = set(problem.getStartState())
-    ToVisit.push((problem.getStartState() , []))
+    toVisit = util.Queue()
+    visited = set(problem.getStartState())
+    toVisit.push((problem.getStartState() , []))
     
 
-    while not ToVisit.isEmpty():
-        State , DirList = ToVisit.pop()
-        if problem.isGoalState(State):
-            return DirList
+    while not toVisit.isEmpty():
+        state , dirList = toVisit.pop()
+        if problem.isGoalState(state):
+            return dirList
 
-        for succesor, dir, cost in problem.getSuccessors(State):
-            if succesor not in Visited:
-                ToVisit.push((succesor, DirList + [dir]))
-                Visited.add(succesor)
+        for successor, dir, cost in problem.getSuccessors(state):
+            if successor not in visited:
+                toVisit.push((successor, dirList + [dir]))
+                visited.add(successor)
                 
     return []
 
 
-
-    
-    util.raiseNotDefined()
-
 def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
-    ToVisit = util.PriorityQueue()
-    TotalCost = {}
-    ToVisit.push((problem.getStartState() , []), 0)
-    TotalCost[problem.getStartState()] = 0
+    toVisit = util.PriorityQueue()
+    totalCost = {}
+    toVisit.push((problem.getStartState() , []), 0)
+    totalCost[problem.getStartState()] = 0
 
-    while not ToVisit.isEmpty():
-        State , DirList = ToVisit.pop()
+    while not toVisit.isEmpty():
+        state , dirList = toVisit.pop()
         
-        if problem.isGoalState(State):
-            return DirList
+        if problem.isGoalState(state):
+            return dirList
 
-        if State not in TotalCost:
-            TotalCost.add(State)
+        if state not in totalCost:
+            totalCost.add(state)
 
-        for succesor, dir, cost in problem.getSuccessors(State):
-            newCost = TotalCost[State] + cost
-            if succesor not in TotalCost or newCost < TotalCost[succesor]:
-                TotalCost[succesor] = newCost
-                ToVisit.push((succesor, DirList + [dir]), newCost)
+        for successor, dir, cost in problem.getSuccessors(state):
+            newCost = totalCost[state] + cost
+            if (successor not in totalCost) or (newCost < totalCost[successor]):
+                totalCost[successor] = newCost
+                toVisit.push((successor, dirList + [dir]), newCost)
                 
     return []
 
