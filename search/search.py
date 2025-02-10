@@ -84,7 +84,7 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
 
     while not toVisit.isEmpty():
         state , dirList = toVisit.pop()
-        if problem.isGoalState(State):
+        if problem.isGoalState(state):
             return dirList
         
         if state not in visited:
