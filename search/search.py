@@ -76,44 +76,45 @@ def tinyMazeSearch(problem: SearchProblem) -> List[Directions]:
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
-    toVisit = util.Stack()
-    visited = set()
-    toVisit.push((problem.getStartState() , []))
-    print("stack items", toVisit.getElements())
-
-
-    while not toVisit.isEmpty():
-        state , dirList = toVisit.pop()
+    currentStack = util.Stack()
+    # current = problem
+    start_state = problem.getStartState()
+    currentStack.push((start_state, []))
+    visitedNodes = set()
+    # print("Current stack: \n", currentStack.getElements())
+    #while the stack is not empty
+    while not currentStack.isEmpty():
+        state, path = currentStack.pop()
+        # print("Current stack:", currentStack.getElements())
         if problem.isGoalState(state):
-            return dirList
-        
-        if state not in visited:
-            visited.add(state)
-
-        for successor, dir, cost in problem.getSuccessors(state):
-            if successor not in visited:
-                toVisit.push((successor, dirList + [dir]))
-
+            # print("Current stack: \n", currentStack.getElements())
+            return path
+        if state not in visitedNodes:
+            visitedNodes.add(state)
+        for successor, action, stepCost in problem.getSuccessors(state):
+            if successor not in visitedNodes:
+                currentStack.push((successor, path + [action]))
+                # print("Current stack: \n", currentStack.getElements())
     return []
-
+  
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
-    toVisit = util.Queue()
-    visited = set(problem.getStartState())
-    toVisit.push((problem.getStartState() , []))
+    """Search the shallowest nodes in the search tree first."""
+    "*** YOUR CODE HERE ***"
+    currentQueue = util.Queue()
+    start_state = problem.getStartState()
+    currentQueue.push((start_state, []))
+    visitedNodes = set()
     
-
-    while not toVisit.isEmpty():
-        state , dirList = toVisit.pop()
+    while not currentQueue.isEmpty():
+        state, path = currentQueue.pop()
         if problem.isGoalState(state):
-            return dirList
-
-        for successor, dir, cost in problem.getSuccessors(state):
-            if successor not in visited:
-                toVisit.push((successor, dirList + [dir]))
-                visited.add(successor)
-                
+            return path
+        if state not in visitedNodes:
+            visitedNodes.add(state)
+        for successor, action, stepCost in problem.getSuccessors(state):
+            if successor not in visitedNodes:
+                currentQueue.push((successor, path + [action]))
     return []
-
 
 def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
     toVisit = util.PriorityQueue()
@@ -137,6 +138,7 @@ def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
                 toVisit.push((successor, dirList + [dir]), newCost)
                 
     return []
+
 
 def nullHeuristic(state, problem=None) -> float:
     """
