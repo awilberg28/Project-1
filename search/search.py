@@ -99,8 +99,9 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
   
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     toVisit = util.Queue()
-    visited = set(problem.getStartState())
-    toVisit.push((problem.getStartState() , []))
+    start = problem.getStartState()
+    visited = set(start)
+    toVisit.push((start , []))
     
 
     while not toVisit.isEmpty():
@@ -127,10 +128,7 @@ def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
         
         if problem.isGoalState(state):
             return dirList
-
-        if state not in totalCost:
-            totalCost.add(state)
-
+        
         for successor, dir, cost in problem.getSuccessors(state):
             newCost = totalCost[state] + cost
             if (successor not in totalCost) or (newCost < totalCost[successor]):
@@ -148,10 +146,24 @@ def nullHeuristic(state, problem=None) -> float:
     return 0
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic) -> List[Directions]:
-    """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    toVisit = util.PriorityQueue()
+    totalCost = {}
+    toVisit.push((problem.getStartState() , []), 0)
+    totalCost[problem.getStartState()] = 0
 
+    while not toVisit.isEmpty():
+        state , dirList = toVisit.pop()
+        
+        if problem.isGoalState(state):
+            return dirList
+
+        for successor, dir, cost in problem.getSuccessors(state):
+            newCost = totalCost[state] + cost
+            if (successor not in totalCost) or (newCost < totalCost[successor]):
+                totalCost[successor] = newCost
+                toVisit.push((successor, dirList + [dir]), newCost + heuristic(successor,problem))
+                
+    return []
 # Abbreviations
 bfs = breadthFirstSearch
 dfs = depthFirstSearch

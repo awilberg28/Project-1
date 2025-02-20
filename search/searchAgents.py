@@ -296,6 +296,9 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
+
+        # returns a tuple in the form (starting position, tuple list of visited corners)
+        return (self.startingPosition, tuple())
         util.raiseNotDefined()
 
     def isGoalState(self, state: Any):
@@ -303,7 +306,8 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        pos, visitedCorners = state
+        return len(visitedCorners) == 4
 
     def getSuccessors(self, state: Any):
         """
@@ -317,15 +321,21 @@ class CornersProblem(search.SearchProblem):
         """
 
         successors = []
+        
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
-            #   x,y = currentPosition
-            #   dx, dy = Actions.directionToVector(action)
-            #   nextx, nexty = int(x + dx), int(y + dy)
-            #   hitsWall = self.walls[nextx][nexty]
+            (x,y), cornersVisited = state
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
 
-            "*** YOUR CODE HERE ***"
+            if not hitsWall:
+                if (nextx,nexty) in self.corners and (nextx,nexty) not in cornersVisited:
+                    newCornersVisted = cornersVisited + ((nextx,nexty),)
+                    cornersVisited = newCornersVisted
+                successors.append((((nextx,nexty), cornersVisited), action, 1))
+
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -360,6 +370,31 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     """
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+
+    (x,y), visitedCorners = state
+
+    distance = 0
+    cornDis = 0
+
+    #This heuristic first calculates the distance from your starting point to each corner then from that corner to all other corners
+    #The heuristic then takes the max distance from each of the calculations
+
+    if len(visitedCorners) != 4:
+        for corner1 in corners:
+            if corner1 not in visitedCorners:
+                goalX, goalY = corner1 
+                for nextCorner in corners:
+                    nextX, nextY = nextCorner
+                    cornDis = abs(nextX-x) + abs(nextY-y)
+                newDist = abs(goalX-x) + abs(goalY-y) + cornDis
+                if newDist > distance:
+                    distance = newDist
+
+        return distance
+
+    
+            
+    
 
     "*** YOUR CODE HERE ***"
     return 0 # Default to trivial solution
