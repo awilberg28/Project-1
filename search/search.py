@@ -98,8 +98,9 @@ def depthFirstSearch(problem: SearchProblem) -> List[Directions]:
 
 def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     toVisit = util.Queue()
-    visited = set(problem.getStartState())
-    toVisit.push((problem.getStartState() , []))
+    start = problem.getStartState()
+    visited = set(start)
+    toVisit.push((start , []))
     
 
     while not toVisit.isEmpty():
