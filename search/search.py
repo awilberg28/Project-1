@@ -116,7 +116,6 @@ def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
                 
     return []
 
-
 def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
     toVisit = util.PriorityQueue()
     totalCost = {}

@@ -505,7 +505,7 @@ class GameStateData:
         self._eaten = [False for a in self.agentStates]
 
 try:
-    import boinc
+    import boinc # type: ignore
     _BOINC_ENABLED = True
 except:
     _BOINC_ENABLED = False
