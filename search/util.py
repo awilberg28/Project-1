@@ -152,6 +152,9 @@ class Stack:
     
     def size(self):
         return len(self.list)
+      
+    def getElements(self):
+        return self.list
 
 class Queue:
     "A container with a first-in-first-out (FIFO) queuing policy."
