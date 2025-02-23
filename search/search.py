@@ -101,17 +101,17 @@ def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
     toVisit = util.Queue()
     start = problem.getStartState()
     visited = set(start)
-    toVisit.push((start , []))
+    toVisit.enqueue((start , []))
     
 
     while not toVisit.isEmpty():
-        state , dirList = toVisit.pop()
+        state , dirList = toVisit.dequeue()
         if problem.isGoalState(state):
             return dirList
 
         for successor, dir, cost in problem.getSuccessors(state):
             if successor not in visited:
-                toVisit.push((successor, dirList + [dir]))
+                toVisit.enqueue((successor, dirList + [dir]))
                 visited.add(successor)
                 
     return []
@@ -119,11 +119,11 @@ def breadthFirstSearch(problem: SearchProblem) -> List[Directions]:
 def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
     toVisit = util.PriorityQueue()
     totalCost = {}
-    toVisit.push((problem.getStartState() , []), 0)
+    toVisit.enqueue((problem.getStartState() , []), 0)
     totalCost[problem.getStartState()] = 0
 
     while not toVisit.isEmpty():
-        state , dirList = toVisit.pop()
+        state , dirList = toVisit.dequeue()
         
         if problem.isGoalState(state):
             return dirList
@@ -132,7 +132,7 @@ def uniformCostSearch(problem: SearchProblem) -> List[Directions]:
             newCost = totalCost[state] + cost
             if (successor not in totalCost) or (newCost < totalCost[successor]):
                 totalCost[successor] = newCost
-                toVisit.push((successor, dirList + [dir]), newCost)
+                toVisit.enqueue((successor, dirList + [dir]), newCost)
                 
     return []
 
@@ -147,11 +147,11 @@ def nullHeuristic(state, problem=None) -> float:
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic) -> List[Directions]:
     toVisit = util.PriorityQueue()
     totalCost = {}
-    toVisit.push((problem.getStartState() , []), 0)
+    toVisit.enqueue((problem.getStartState() , []), 0)
     totalCost[problem.getStartState()] = 0
 
     while not toVisit.isEmpty():
-        state , dirList = toVisit.pop()
+        state , dirList = toVisit.dequeue()
         
         if problem.isGoalState(state):
             return dirList
@@ -160,7 +160,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic) -> List[Directi
             newCost = totalCost[state] + cost
             if (successor not in totalCost) or (newCost < totalCost[successor]):
                 totalCost[successor] = newCost
-                toVisit.push((successor, dirList + [dir]), newCost + heuristic(successor,problem))
+                toVisit.enqueue((successor, dirList + [dir]), newCost + heuristic(successor,problem))
                 
     return []
 # Abbreviations
