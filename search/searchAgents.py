@@ -376,22 +376,42 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     distance = 0
     cornDis = 0
 
-    #This heuristic first calculates the distance from your starting point to each corner then from that corner to all other corners
-    #The heuristic then takes the max distance from each of the calculations
+    # This heuristic finds two the corners that are the farthest, and of those two corners, which of them the current position is closest to.
+    # It returns the manhattan distance from curent pos--> closest corner --> farthest corner.
+
+    from itertools import permutations
 
     if len(visitedCorners) != 4:
-        for corner1 in corners:
-            if corner1 not in visitedCorners:
-                for nextCorner in corners:
-                    cornDis = util.manhattanDistance(nextCorner,corner1)
-                newDist = util.manhattanDistance(position,corner1) + cornDis
-                if newDist > distance:
-                    distance = newDist
+        remainingCorners = [corner for corner in corners if corner not in visitedCorners]   
+        if len(remainingCorners) >= 2:
+            perm = permutations(remainingCorners,2)
+          
+            maxDis, cornerPair = max(
+                ((util.manhattanDistance(cornerPair[0],cornerPair[1]), cornerPair) for cornerPair in perm),
+                key=lambda x: x[0])
+            minDis = min(util.manhattanDistance(position,corner) for corner in cornerPair)
 
-        return distance
+            return maxDis + minDis
+        elif len(remainingCorners) == 1:
+            return util.manhattanDistance(position, remainingCorners[0])
+    return 0
 
-    "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+
+    #I'm pretty sure this heuristic is actually not admissible and calculated wrong
+
+    # if len(visitedCorners) != 4:
+    #     for corner1 in corners:
+    #         if corner1 not in visitedCorners:
+    #             for nextCorner in corners:
+    #                 cornDis = util.manhattanDistance(nextCorner,corner1)
+    #                 newDist = util.manhattanDistance(position,corner1) + cornDis
+    #             if newDist > distance:
+    #                 distance = newDist
+
+    #     return distance
+
+    # "*** YOUR CODE HERE ***"
+    # return 0 # Default to trivial solution
 
 
 
