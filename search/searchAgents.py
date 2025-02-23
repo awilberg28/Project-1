@@ -583,7 +583,8 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.breadthFirstSearch(problem)  
+
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -610,16 +611,60 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         self.startState = gameState.getPacmanPosition()
         self.costFn = lambda x: 1
         self._visited, self._visitedlist, self._expanded = {}, [], 0 # DO NOT CHANGE
-
+        
+    def getStartState(self):
+        return self.startState
+    
     def isGoalState(self, state: Tuple[int, int]):
         """
         The state is Pacman's position. Fill this in with a goal test that will
         complete the problem definition.
         """
         x,y = state
+        return self.food[x][y]
+    def getSuccessors(self, state):
+            """
+            Returns successor states, the actions they require, and a cost of 1.
+            As noted in search.py:
+                For a given state, this should return a list of triples, (successor,
+                action, stepCost), where 'successor' is a successor to the current
+                state, 'action' is the action required to get there, and 'stepCost'
+                is the incremental cost of expanding to that successor
+            """
+            successors = []
+            for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+                x, y = state
+                dx, dy = Actions.directionToVector(direction)
+                nextx, nexty = int(x + dx), int(y + dy)
+                if not self.walls[nextx][nexty]:
+                    nextState = (nextx, nexty)
+                    cost = 1
+                    successors.append((nextState, direction, cost))
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+            self._expanded += 1 # DO NOT CHANGE
+            return successors
+    def getCostOfActions(self, actions):
+        """
+        Returns the cost of a particular sequence of actions. If those actions
+        include an illegal move, return 999999.
+        """
+        if actions == None: return 999999
+        x, y = self.getStartState()
+        cost = 0
+        for action in actions:
+            dx, dy = Actions.directionToVector(action)
+            x, y = int(x + dx), int(y + dy)
+            if self.walls[x][y]:
+                return 999999
+            cost += 1
+        return cost      
+    # def findPathToClosestDot(gameState):
+    #     """
+    #     Returns a path (a list of actions) to the closest dot, starting from
+    #     gameState.
+    #     """
+    #     problem = AnyFoodSearchProblem(gameState)
+    #     return search.breadthFirstSearch(problem)  
 
 def mazeDistance(point1: Tuple[int, int], point2: Tuple[int, int], gameState: pacman.GameState) -> int:
     """
